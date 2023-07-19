@@ -1,13 +1,21 @@
 import React, { useState } from 'react';
 import MainPage from './js/mainpage';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import SingUp from './js/singup';
+import { Routes, Route, BrowserRouter } from "react-router-dom";
+
+
 
 
 function App() {
   return (
-    <div className="App">
-      <MainPage/>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        {/* 웹 서비스 소개 페이지 */}
+          <Route path="/" element={<MainPage/>} />
+          {/* <SignIn /> */}
+          <Route path="/signup" element={<SingUp/>} />
+        </Routes>
+      </BrowserRouter> 
 
   // <Router>
   // <Switch>
