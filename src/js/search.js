@@ -62,7 +62,7 @@ const SearchBox = ({ keywords }) => {
         value={search}
         onChange={handleSearchChange}
         onKeyPress={handleKeyPress}
-        placeholder="우리집 근처 댕댕이 미용실은?"
+        placeholder="  우리집 근처 댕댕이 미용실은?"
       />
       <SearchIcon className="material-icons">🔍︎</SearchIcon>
       {search && filteredKeywords.length > 0 ? (

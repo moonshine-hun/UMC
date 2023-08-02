@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-// import LoginPage from '../js/loginpage/loginpage.js';
 import styled from 'styled-components';
 import axios from 'axios';
-import PropTypes from "prop-types";
+import { GoogleLogin } from 'react-google-login';
+import FacebookLogin from 'react-facebook-login';
+
 
 
 const PopupContainer = styled.div`
@@ -160,8 +161,8 @@ const SubMenuText = styled.span`
 
 
 
-
-const LoginPage = () => {
+// Kakao 로그인 코드에서는 window.Kakao.Auth.login 함수를 호출하여 사용자가 카카오 계정으로 로그인할 수 있도록 합니다. 로그인 성공 시 success 콜백 함수가 실행되며, 이 함수의 authObj 파라미터에 액세스 토큰과 사용자 정보 등이 포함
+const KakaoLoginPage = () => {
   useEffect(() => {
     const script = document.createElement('script');
     script.src = 'https://developers.kakao.com/sdk/js/kakao.js';
@@ -180,9 +181,10 @@ const LoginPage = () => {
 
   const kakaoLogin = () => {
     window.Kakao.Auth.login({
-      // 가져올 정보
+      // 가져올 정보, 인증을 위한 표준 프로토콜
       scope: 'profile_nickname, profile_image account_email, gender',
       success: function(authObj) {
+        // authObj = access token
         console.log(authObj);
         window.Kakao.API.request({
           url: '/v2/user/me',
@@ -198,10 +200,79 @@ const LoginPage = () => {
   return (
     <div>
       {/* your React component JSX */}
-      <ImageButton src="https://th.bing.com/th/id/OIP.q-AgJBHYRJxAVFOwWk339wHaHa?w=202&h=202&c=7&r=0&o=5&dpr=1.3&pid=1.7" onClick={kakaoLogin}></ImageButton>
+      <ImageButton src="https://cloud.adofai.gg/apps/files_sharing/publicpreview/cj4GTz3xLmExWjG?file=/image%2036.png&fileId=7624&x=1920&y=1080&a=true" onClick={kakaoLogin}></ImageButton>
     </div>
   );
 };
+
+
+//현재 Cross-Origin-Opener-Policy policy would block the window.closed call. 문제 발생
+// 해당 오류를 해결하기 위해서는 Google 로그인을 처리하는 방식을 변경해야 할 수 있습니다. Cross-Origin-Opener-Policy(COOP)와 관련된 이슈는 주로 OAuth 인증 프로세스가 팝업 창을 사용할 때 발생합니다. 따라서 다음과 같은 방법을 고려해 볼 수 있습니다.
+// 리디렉션 방식 사용: GoogleLogin 컴포넌트를 사용할 때, onSuccess와 onFailure 콜백을 활용하여 OAuth 인증을 처리하는 대신, 사용자를 Google 로그인 페이지로 리디렉션하는 방식으로 변경합니다. 이렇게 하면 팝업 창을 사용하지 않기 때문에 COOP와 관련된 문제를 회피할 수 있습니다.
+// 서버 측에서 OAuth 처리: OAuth 인증 프로세스를 서버 측에서 처리하도록 변경합니다. 클라이언트 측에서 OAuth 인증 정보를 서버로 전달하고, 서버에서 Google API와 통신하여 인증 처리를 수행합니다. 이렇게 하면 클라이언트 측에서 발생하는 보안 정책 문제를 최소화할 수 있습니다.
+// COOP 정책 설정: 서버 측에서 COOP 정책을 설정하여 팝업 창과 관련된 보안 정책을 조정할 수도 있습니다. 이 방법은 브라우저와 서버 환경에 따라 다를 수 있으며, 구체적인 설정 방법은 해당 브라우저와 서버 플랫폼의 문서를 참고해야 합니다.
+
+// Google 로그인 코드에서는 GoogleLogin 컴포넌트를 사용하여 구글 로그인 버튼을 렌더링하고, 사용자가 버튼을 클릭하여 로그인할 수 있도록 합니다. 로그인 성공 시 onSuccess 콜백 함수가 실행되며, 이 함수의 response 파라미터에 액세스 토큰과 사용자 정보 등이 포함
+const GoogleLoginPage = () => {
+  // 로그인 성공 시 실행될 콜백 함수
+  const onSuccess = (response) => {
+    console.log('로그인 성공:', response);
+    // 여기서 response에는 액세스 토큰과 사용자 정보 등이 들어있습니다.
+    // 원하는 작업을 수행하시면 됩니다.
+  };
+
+  // 로그인 실패 시 실행될 콜백 함수
+  const onFailure = (error) => {
+    console.log('로그인 실패:', error);
+  };
+
+  return (
+    <div>
+      {/* 이미지 버튼으로 대체한 Google 로그인 버튼 */}
+      <GoogleLogin
+        clientId="197893474674-vhi64kondip7pbvbm67pk5331hb60099.apps.googleusercontent.com"
+        buttonText="Google 계정으로 로그인"
+        onSuccess={onSuccess}
+        onFailure={onFailure}
+        cookiePolicy="single_host_origin"
+        // render를 통해 버튼 모양 변경
+        render={renderProps => (
+          <ImageButton src="https://cloud.adofai.gg/apps/files_sharing/publicpreview/cj4GTz3xLmExWjG?file=/image%2041.png&fileId=7626&x=1920&y=1080&a=true"onClick={renderProps.onClick}></ImageButton>
+        )}
+      />
+    </div>
+  );
+};
+
+
+const FacebookLoginPage = () => {
+  // 로그인 성공 시 실행될 콜백 함수
+  const responseFacebook = (response) => {
+    console.log('페이스북 로그인 성공:', response);
+    // 여기서 response에는 액세스 토큰과 사용자 정보 등이 들어있습니다.
+    // 원하는 작업을 수행하시면 됩니다.
+  };
+
+  // 로그인 실패 시 실행될 콜백 함수
+  const onFailure = (error) => {
+    console.log('페이스북 로그인 실패:', error);
+  };
+
+  return (
+    <div>
+      {/* 페이스북 로그인 버튼 */}
+      <FacebookLogin
+        appId="1280632759242438"
+        fields="name,email,picture"
+        callback={responseFacebook}
+        onFailure={onFailure}
+      />
+    </div>
+  );
+};
+
+
+
 
 
 const SignupPopup = styled.div`
@@ -278,6 +349,8 @@ const CancelButton = styled.button`
   letter-spacing: -2px; /* 글자 간격을 좁게 설정 */
 `;
 
+
+// 회원가입이동 팝업창
 const SignupPopupComponent = ({ onClose }) => {
   const handleSignupClick = () => {
     // 회원 가입 창으로 이동하는 로직 작성
@@ -309,8 +382,8 @@ const SignupPopupComponent = ({ onClose }) => {
 
 
 
-const HeaderResult = (props) => {
-  const [activeLink, setActiveLink] = useState("/signin");
+const HeaderResult = () => {
+  const [activeLink, setActiveLink] = useState("/signup");
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [isLoggedIn, setLoggedIn] = useState(false);
 
@@ -336,16 +409,7 @@ const HeaderResult = (props) => {
   };
 
   const handleLogoutClick = () => {
-    axios.get('/api/users/logout')
-    .then(response => {
-        if(response.data.success){
-            localStorage.removeItem("loginInfo");
-            setLoggedIn(false); // 로그아웃 상태로 변경
-            window.alert("로그아웃되었습니다.");
-        } else {
-            alert('Error')
-        }
-    });
+    logout();
   };
 
   return (
@@ -411,12 +475,12 @@ const HeaderResult = (props) => {
               <TopImage src="https://cloud.adofai.gg/apps/files_sharing/publicpreview/cj4GTz3xLmExWjG?file=/10.png&fileId=7306&x=1920&y=1080&a=true" alt="animore" />
               <Text>SNS 계정으로 로그인</Text>
               <ButtonContainer>
-                <LoginPage/>
-                <ImageButton src="https://th.bing.com/th/id/OIP.q-AgJBHYRJxAVFOwWk339wHaHa?w=202&h=202&c=7&r=0&o=5&dpr=1.3&pid=1.7"/>
-                <ImageButton src="https://th.bing.com/th/id/OIP.q-AgJBHYRJxAVFOwWk339wHaHa?w=202&h=202&c=7&r=0&o=5&dpr=1.3&pid=1.7"/>
-                <ImageButton src="https://th.bing.com/th/id/OIP.q-AgJBHYRJxAVFOwWk339wHaHa?w=202&h=202&c=7&r=0&o=5&dpr=1.3&pid=1.7"/>
+                <KakaoLoginPage/>
+                <ImageButton src="https://cloud.adofai.gg/apps/files_sharing/publicpreview/cj4GTz3xLmExWjG?file=/image%2040.png&fileId=7625&x=1920&y=1080&a=true"/>
+                <GoogleLoginPage/>
+                <ImageButton src="https://cloud.adofai.gg/apps/files_sharing/publicpreview/cj4GTz3xLmExWjG?file=/image%2042.png&fileId=7627&x=1920&y=1080&a=true"/>
               </ButtonContainer>
-              <SignupPopupComponent onClose={handlePopupClose} />
+              {/* {isLoggedIn && <SignupPopupComponent onClose={handlePopupClose} />} */}
             </PopupContainer>
           </div>
         </div>

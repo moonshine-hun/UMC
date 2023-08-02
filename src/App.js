@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import MainPage from './js/mainpage';
 import SingUp from './js/singup';
+import SingUpNext from './js/signupnext';
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 
 
@@ -12,8 +13,10 @@ function App() {
       <Routes>
         {/* 웹 서비스 소개 페이지 */}
           <Route path="/" element={<MainPage/>} />
-          {/* <SignIn /> */}
+          {/* <SignUp /> */}
           <Route path="/signup" element={<SingUp/>} />
+          {/* <SignupNext /> */}
+          <Route path="/signupNext" element={<SingUpNext/>} />
         </Routes>
       </BrowserRouter> 
 
