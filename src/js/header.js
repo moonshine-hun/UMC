@@ -387,7 +387,7 @@ const CancelButton = styled.button`
 `;
 
 
-// 회원가입이동 팝업창
+// 회원가입 이동 팝업창
 const SignupPopupComponent = ({ onClose }) => {
   const handleSignupClick = () => {
     // 회원 가입 창으로 이동하는 로직 작성
