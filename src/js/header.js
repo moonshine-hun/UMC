@@ -297,7 +297,7 @@ const sendUserDataToServer = (accessToken) => {
       console.log('서버 응답:', response.data);
     })
     .catch((error) => {
-      console.error('서버 에러:', error);
+      console.error('서버 에러 발생:', error);
     });
 };
 
