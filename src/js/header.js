@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import { GoogleLogin } from 'react-google-login';
-import FacebookLogin from 'react-facebook-login';
+
 
 
 
@@ -161,115 +160,151 @@ const SubMenuText = styled.span`
 
 
 
-// Kakao 로그인 코드에서는 window.Kakao.Auth.login 함수를 호출하여 사용자가 카카오 계정으로 로그인할 수 있도록 합니다. 로그인 성공 시 success 콜백 함수가 실행되며, 이 함수의 authObj 파라미터에 액세스 토큰과 사용자 정보 등이 포함
-const KakaoLoginPage = () => {
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://developers.kakao.com/sdk/js/kakao.js';
-    script.async = true;
-    document.body.appendChild(script);
-
-    script.onload = () => {
-      // Kakao REST API 키를 입력하세요.
-      window.Kakao.init('90e23e598209e441f5714412656e7865');
-    };
-
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
-
-  const kakaoLogin = () => {
-    window.Kakao.Auth.login({
-      // 가져올 정보, 인증을 위한 표준 프로토콜
-      scope: 'profile_nickname, profile_image account_email, gender',
-      success: function(authObj) {
-        // authObj = access token
-        console.log(authObj);
-        window.Kakao.API.request({
-          url: '/v2/user/me',
-          success: function(res) {
-            const kakao_account = res.kakao_account;
-            console.log(kakao_account);
-          }
-        });
-      }
-    });
-  };
-
+const NaverLoginPage = () => {
   return (
-    <div>
-      {/* your React component JSX */}
-      <ImageButton src="https://cloud.adofai.gg/apps/files_sharing/publicpreview/cj4GTz3xLmExWjG?file=/image%2036.png&fileId=7624&x=1920&y=1080&a=true" onClick={kakaoLogin}></ImageButton>
-    </div>
+    <ImageButton
+      src="https://cloud.adofai.gg/apps/files_sharing/publicpreview/cj4GTz3xLmExWjG?file=/image%2041.png&fileId=7626&x=1920&y=1080&a=true"
+      alt="Naver Login"
+      onClick={handleNaverLogin} // 네이버 로그인 처리 함수 연결
+    />
   );
 };
 
-
-//현재 Cross-Origin-Opener-Policy policy would block the window.closed call. 문제 발생
-// 해당 오류를 해결하기 위해서는 Google 로그인을 처리하는 방식을 변경해야 할 수 있습니다. Cross-Origin-Opener-Policy(COOP)와 관련된 이슈는 주로 OAuth 인증 프로세스가 팝업 창을 사용할 때 발생합니다. 따라서 다음과 같은 방법을 고려해 볼 수 있습니다.
-// 리디렉션 방식 사용: GoogleLogin 컴포넌트를 사용할 때, onSuccess와 onFailure 콜백을 활용하여 OAuth 인증을 처리하는 대신, 사용자를 Google 로그인 페이지로 리디렉션하는 방식으로 변경합니다. 이렇게 하면 팝업 창을 사용하지 않기 때문에 COOP와 관련된 문제를 회피할 수 있습니다.
-// 서버 측에서 OAuth 처리: OAuth 인증 프로세스를 서버 측에서 처리하도록 변경합니다. 클라이언트 측에서 OAuth 인증 정보를 서버로 전달하고, 서버에서 Google API와 통신하여 인증 처리를 수행합니다. 이렇게 하면 클라이언트 측에서 발생하는 보안 정책 문제를 최소화할 수 있습니다.
-// COOP 정책 설정: 서버 측에서 COOP 정책을 설정하여 팝업 창과 관련된 보안 정책을 조정할 수도 있습니다. 이 방법은 브라우저와 서버 환경에 따라 다를 수 있으며, 구체적인 설정 방법은 해당 브라우저와 서버 플랫폼의 문서를 참고해야 합니다.
-
-// Google 로그인 코드에서는 GoogleLogin 컴포넌트를 사용하여 구글 로그인 버튼을 렌더링하고, 사용자가 버튼을 클릭하여 로그인할 수 있도록 합니다. 로그인 성공 시 onSuccess 콜백 함수가 실행되며, 이 함수의 response 파라미터에 액세스 토큰과 사용자 정보 등이 포함
+// 구글 로그인 버튼 컴포넌트
 const GoogleLoginPage = () => {
-  // 로그인 성공 시 실행될 콜백 함수
-  const onSuccess = (response) => {
-    console.log('로그인 성공:', response);
-    // 여기서 response에는 액세스 토큰과 사용자 정보 등이 들어있습니다.
-    // 원하는 작업을 수행하시면 됩니다.
-  };
-
-  // 로그인 실패 시 실행될 콜백 함수
-  const onFailure = (error) => {
-    console.log('로그인 실패:', error);
-  };
-
   return (
-    <div>
-      {/* 이미지 버튼으로 대체한 Google 로그인 버튼 */}
-      <GoogleLogin
-        clientId="197893474674-vhi64kondip7pbvbm67pk5331hb60099.apps.googleusercontent.com"
-        buttonText="Google 계정으로 로그인"
-        onSuccess={onSuccess}
-        onFailure={onFailure}
-        cookiePolicy="single_host_origin"
-        // render를 통해 버튼 모양 변경
-        render={renderProps => (
-          <ImageButton src="https://cloud.adofai.gg/apps/files_sharing/publicpreview/cj4GTz3xLmExWjG?file=/image%2041.png&fileId=7626&x=1920&y=1080&a=true"onClick={renderProps.onClick}></ImageButton>
-        )}
-      />
-    </div>
+    <ImageButton
+      src="https://cloud.adofai.gg/apps/files_sharing/publicpreview/cj4GTz3xLmExWjG?file=/image%2041.png&fileId=7626&x=1920&y=1080&a=true"
+      alt="Google Login"
+      onClick={handleGoogleLogin} // 구글 로그인 처리 함수 연결
+    />
   );
 };
 
-
+// 페이스북 로그인 버튼 컴포넌트
 const FacebookLoginPage = () => {
-  // 로그인 성공 시 실행될 콜백 함수
-  const responseFacebook = (response) => {
-    console.log('페이스북 로그인 성공:', response);
-    // 여기서 response에는 액세스 토큰과 사용자 정보 등이 들어있습니다.
-    // 원하는 작업을 수행하시면 됩니다.
-  };
-
-  // 로그인 실패 시 실행될 콜백 함수
-  const onFailure = (error) => {
-    console.log('페이스북 로그인 실패:', error);
-  };
-
   return (
-    <div>
-      {/* 페이스북 로그인 버튼 */}
-      <FacebookLogin
-        appId="1280632759242438"
-        fields="name,email,picture"
-        callback={responseFacebook}
-        onFailure={onFailure}
-      />
-    </div>
+    <ImageButton
+      src="https://cloud.adofai.gg/apps/files_sharing/publicpreview/cj4GTz3xLmExWjG?file=/image%2040.png&fileId=7625&x=1920&y=1080&a=true"
+      alt="Facebook Login"
+      onClick={handleFacebookLogin} // 페이스북 로그인 처리 함수 연결
+    />
   );
 };
+
+// 카카오톡 로그인 버튼 컴포넌트
+const KakaoLoginPage = () => {
+  return (
+    <ImageButton
+      src="https://cloud.adofai.gg/apps/files_sharing/publicpreview/cj4GTz3xLmExWjG?file=/image%2036.png&fileId=7624&x=1920&y=1080&a=true"
+      alt="Kakao Login"
+      onClick={handleKakaoLogin} // 페이스북 로그인 처리 함수 연결
+    />
+  );
+};
+
+// 네이버 로그인 API 호출 함수
+const naverLoginAPI = () => {
+  return axios.post('/oauth2/authorization/naver');
+};
+
+// 구글 로그인 API 호출 함수
+const googleLoginAPI = () => {
+  return axios.post('/oauth2/authorization/google');
+};
+
+// 페이스북 로그인 API 호출 함수
+const facebookLoginAPI = () => {
+  return axios.post('/oauth2/authorization/facebook');
+};
+
+// 카카오톡 로그인 API 호출 함수
+const kakaoLoginAPI = () => {
+  return axios.post('/oauth2/authorization/kakao');
+};
+
+
+
+// 네이버 로그인 처리 함수
+const handleNaverLogin = () => {
+  // 네이버 로그인 API와 연동하여 로그인 처리
+  // 로그인 성공 시 받은 토큰을 서버로 전송하거나 필요한 작업 수행
+  // 예시: 네이버 로그인 API 호출 및 토큰 처리
+  naverLoginAPI()
+    .then((response) => {
+      const accessToken = response.data.accessToken;
+      sendUserDataToServer(accessToken);
+    })
+    .catch((error) => {
+      console.error('네이버 로그인 에러:', error);
+    });
+};
+
+// 구글 로그인 처리 함수
+const handleGoogleLogin = () => {
+  // 구글 로그인 API와 연동하여 로그인 처리
+  // 로그인 성공 시 받은 토큰을 서버로 전송하거나 필요한 작업 수행
+  // 예시: 구글 로그인 API 호출 및 토큰 처리
+  googleLoginAPI()
+    .then((response) => {
+      const accessToken = response.data.accessToken;
+      sendUserDataToServer(accessToken);
+    })
+    .catch((error) => {
+      console.error('구글 로그인 에러:', error);
+    });
+};
+
+// 페이스북 로그인 처리 함수
+const handleFacebookLogin = () => {
+  // 페이스북 로그인 API와 연동하여 로그인 처리
+  // 로그인 성공 시 받은 토큰을 서버로 전송하거나 필요한 작업 수행
+  // 예시: 페이스북 로그인 API 호출 및 토큰 처리
+  facebookLoginAPI()
+    .then((response) => {
+      const accessToken = response.data.accessToken;
+      sendUserDataToServer(accessToken);
+    })
+    .catch((error) => {
+      console.error('페이스북 로그인 에러:', error);
+    });
+};
+
+// 카카오톡 로그인 처리 함수
+const handleKakaoLogin = () => {
+  // 카카오톡 로그인 API와 연동하여 로그인 처리
+  // 로그인 성공 시 받은 토큰을 서버로 전송하거나 필요한 작업 수행
+  // 예시: 카카오톡 로그인 API 호출 및 토큰 처리
+  kakaoLoginAPI()
+    .then((response) => {
+      const accessToken = response.data.accessToken;
+      sendUserDataToServer(accessToken);
+    })
+    .catch((error) => {
+      console.error('카카오톡 로그인 에러:', error);
+    });
+};
+
+// 토큰을 서버로 전송하는 함수
+const sendUserDataToServer = (accessToken) => {
+  // access token : Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjb3PthqDtgbAiLCJpZCI6MSwiZXhwIjoxNjkyNzg1NzE4LCJ1c2VybmFtZSI6Imtha2FvXzI4OTgyMDI5NDQifQ.yFK4TqoT7I2ckMp-pQAytO5vg_IjPr1A3co2iAZMU1OJFkt1H0J2ZxGFSP4Tm-2hnwmvo1OljdxXJCyrHq25Tw
+  const token = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjb3PthqDtgbAiLCJpZCI6MSwiZXhwIjoxNjkyNzg1NzE4LCJ1c2VybmFtZSI6Imtha2FvXzI4OTgyMDI5NDQifQ.yFK4TqoT7I2ckMp-pQAytO5vg_IjPr1A3co2iAZMU1OJFkt1H0J2ZxGFSP4Tm-2hnwmvo1OljdxXJCyrHq25Tw';
+  // 예시: axios를 사용한 POST 요청
+  axios.post('https://prod.badjang2023.shop/users/autologin', { accessToken })
+    .then((response) => {
+      console.log('서버 응답:', response.data);
+    })
+    .catch((error) => {
+      console.error('서버 에러:', error);
+    });
+};
+
+// 각 SNS 로그인 API 호출 함수는 실제 SNS에서 제공하는 로그인 API와 연동되어야 합니다.
+// 위 코드에서는 예시로 토큰만을 처리하는 형식으로 작성되었습니다.
+
+
+
+
 
 
 
@@ -476,9 +511,9 @@ const HeaderResult = () => {
               <Text>SNS 계정으로 로그인</Text>
               <ButtonContainer>
                 <KakaoLoginPage/>
-                <ImageButton src="https://cloud.adofai.gg/apps/files_sharing/publicpreview/cj4GTz3xLmExWjG?file=/image%2040.png&fileId=7625&x=1920&y=1080&a=true"/>
+                <NaverLoginPage/>
                 <GoogleLoginPage/>
-                <ImageButton src="https://cloud.adofai.gg/apps/files_sharing/publicpreview/cj4GTz3xLmExWjG?file=/image%2042.png&fileId=7627&x=1920&y=1080&a=true"/>
+                <FacebookLoginPage/>
               </ButtonContainer>
               {/* {isLoggedIn && <SignupPopupComponent onClose={handlePopupClose} />} */}
             </PopupContainer>

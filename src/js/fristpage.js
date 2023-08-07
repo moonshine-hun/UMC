@@ -10,7 +10,7 @@ import HeaderResult from './header';
 //backgraound 이미지 설정
   const Background = styled.div`
   background-image: url('https://cloud.adofai.gg/apps/files_sharing/publicpreview/cj4GTz3xLmExWjG?file=/Group%207.png&fileId=7563&x=1920&y=1080&a=true');
-  background-size: contain;
+  background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   height: 100vh;
