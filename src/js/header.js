@@ -162,153 +162,66 @@ const SubMenuText = styled.span`
 
 
 
+
+
 const NaverLoginPage = () => {
+  const handleNaverLoginClick = () => {
+    window.location.href = "https://animore.co.kr/oauth2/authorization/naver";
+  };
+
   return (
     <ImageButton
       src="https://cloud.adofai.gg/apps/files_sharing/publicpreview/cj4GTz3xLmExWjG?file=/image%2041.png&fileId=7626&x=1920&y=1080&a=true"
       alt="Naver Login"
-      onClick={handleNaverLogin} // 네이버 로그인 처리 함수 연결
+      onClick={handleNaverLoginClick} // 네이버 로그인 처리 함수 연결
     />
   );
 };
 
 // 구글 로그인 버튼 컴포넌트
 const GoogleLoginPage = () => {
+  const handleGoogleLoginClick = () => {
+    window.location.href = "https://animore.co.kr/oauth2/authorization/google";
+  };
   return (
     <ImageButton
       src="https://cloud.adofai.gg/apps/files_sharing/publicpreview/cj4GTz3xLmExWjG?file=/image%2041.png&fileId=7626&x=1920&y=1080&a=true"
       alt="Google Login"
-      onClick={handleGoogleLogin} // 구글 로그인 처리 함수 연결
+      onClick={handleGoogleLoginClick} // 구글 로그인 처리 함수 연결
     />
   );
 };
 
 // 페이스북 로그인 버튼 컴포넌트
 const FacebookLoginPage = () => {
+  const handleFacebookLoginClick = () => {
+    window.location.href = "https://animore.co.kr/oauth2/authorization/Facebook";
+  };
+
   return (
     <ImageButton
       src="https://cloud.adofai.gg/apps/files_sharing/publicpreview/cj4GTz3xLmExWjG?file=/image%2040.png&fileId=7625&x=1920&y=1080&a=true"
       alt="Facebook Login"
-      onClick={handleFacebookLogin} // 페이스북 로그인 처리 함수 연결
+      onClick={handleFacebookLoginClick} // 페이스북 로그인 처리 함수 연결
     />
   );
 };
 
 // 카카오톡 로그인 버튼 컴포넌트
 const KakaoLoginPage = () => {
+  const handleKakaoLoginClick = () => {
+    window.location.href = "https://animore.co.kr/oauth2/authorization/kakao";
+  };
+
   return (
     <ImageButton
       src="https://cloud.adofai.gg/apps/files_sharing/publicpreview/cj4GTz3xLmExWjG?file=/image%2036.png&fileId=7624&x=1920&y=1080&a=true"
       alt="Kakao Login"
-      onClick={handleKakaoLogin} // 페이스북 로그인 처리 함수 연결
+      // onClick={handleKakaoLogin} // 페이스북 로그인 처리 함수 연결
+      onClick={handleKakaoLoginClick}
     />
   );
 };
-
-// 네이버 로그인 API 호출 함수
-const naverLoginAPI = () => {
-  return axios.post('/oauth2/authorization/naver');
-};
-
-// 구글 로그인 API 호출 함수
-const googleLoginAPI = () => {
-  return axios.post('/oauth2/authorization/google');
-};
-
-// 페이스북 로그인 API 호출 함수
-const facebookLoginAPI = () => {
-  return axios.post('/oauth2/authorization/facebook');
-};
-
-// 카카오톡 로그인 API 호출 함수
-const kakaoLoginAPI = () => {
-  return axios.post('/oauth2/authorization/kakao');
-};
-
-
-
-// 네이버 로그인 처리 함수
-const handleNaverLogin = () => {
-  // 네이버 로그인 API와 연동하여 로그인 처리
-  // 로그인 성공 시 받은 토큰을 서버로 전송하거나 필요한 작업 수행
-  // 예시: 네이버 로그인 API 호출 및 토큰 처리
-  naverLoginAPI()
-    .then((response) => {
-      const accessToken = response.data.accessToken;
-      sendUserDataToServer(accessToken);
-    })
-    .catch((error) => {
-      console.error('네이버 로그인 에러:', error);
-    });
-};
-
-// 구글 로그인 처리 함수
-const handleGoogleLogin = () => {
-  // 구글 로그인 API와 연동하여 로그인 처리
-  // 로그인 성공 시 받은 토큰을 서버로 전송하거나 필요한 작업 수행
-  // 예시: 구글 로그인 API 호출 및 토큰 처리
-  googleLoginAPI()
-    .then((response) => {
-      const accessToken = response.data.accessToken;
-      sendUserDataToServer(accessToken);
-    })
-    .catch((error) => {
-      console.error('구글 로그인 에러:', error);
-    });
-};
-
-// 페이스북 로그인 처리 함수
-const handleFacebookLogin = () => {
-  // 페이스북 로그인 API와 연동하여 로그인 처리
-  // 로그인 성공 시 받은 토큰을 서버로 전송하거나 필요한 작업 수행
-  // 예시: 페이스북 로그인 API 호출 및 토큰 처리
-  facebookLoginAPI()
-    .then((response) => {
-      const accessToken = response.data.accessToken;
-      sendUserDataToServer(accessToken);
-    })
-    .catch((error) => {
-      console.error('페이스북 로그인 에러:', error);
-    });
-};
-
-// 카카오톡 로그인 처리 함수
-const handleKakaoLogin = () => {
-  // 카카오톡 로그인 API와 연동하여 로그인 처리
-  // 로그인 성공 시 받은 토큰을 서버로 전송하거나 필요한 작업 수행
-  // 예시: 카카오톡 로그인 API 호출 및 토큰 처리
-  kakaoLoginAPI()
-    .then((response) => {
-      const accessToken = response.data.accessToken;
-      sendUserDataToServer(accessToken);
-    })
-    .catch((error) => {
-      console.error('카카오톡 로그인 에러:', error);
-    });
-};
-
-// 토큰을 서버로 전송하는 함수
-const sendUserDataToServer = (accessToken) => {
-  // access token : Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjb3PthqDtgbAiLCJpZCI6MSwiZXhwIjoxNjkyNzg1NzE4LCJ1c2VybmFtZSI6Imtha2FvXzI4OTgyMDI5NDQifQ.yFK4TqoT7I2ckMp-pQAytO5vg_IjPr1A3co2iAZMU1OJFkt1H0J2ZxGFSP4Tm-2hnwmvo1OljdxXJCyrHq25Tw
-  const token = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjb3PthqDtgbAiLCJpZCI6MSwiZXhwIjoxNjkyNzg1NzE4LCJ1c2VybmFtZSI6Imtha2FvXzI4OTgyMDI5NDQifQ.yFK4TqoT7I2ckMp-pQAytO5vg_IjPr1A3co2iAZMU1OJFkt1H0J2ZxGFSP4Tm-2hnwmvo1OljdxXJCyrHq25Tw';
-  // 예시: axios를 사용한 POST 요청
-  axios.post('/users/autologin', { accessToken })
-    .then((response) => {
-      console.log('서버 응답:', response.data);
-    })
-    .catch((error) => {
-      console.error('서버 에러 발생:', error);
-    });
-};
-
-// 각 SNS 로그인 API 호출 함수는 실제 SNS에서 제공하는 로그인 API와 연동되어야 합니다.
-// 위 코드에서는 예시로 토큰만을 처리하는 형식으로 작성되었습니다.
-
-
-
-
-
-
 
 
 
@@ -423,6 +336,7 @@ const HeaderResult = () => {
   const [activeLink, setActiveLink] = useState("/signup");
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [isLoggedIn, setLoggedIn] = useState(false);
+  const [token, setToken] = useState(null);
 
   const handleLinkClick = (event, link) => {
     setActiveLink(link);
@@ -443,11 +357,39 @@ const HeaderResult = () => {
     localStorage.removeItem("loginInfo");
     window.alert("로그아웃되었습니다.");
     setLoggedIn(false);
+    setToken(null); // 토큰도 초기화
   };
 
   const handleLogoutClick = () => {
     logout();
   };
+
+  const handleLoginSuccess = async (resultToken) => {
+    try {
+      const response = await axios.get(
+        "https://animore.co.kr/login/oauth2/code/kakao",
+        {
+          headers: {
+            Authorization: `Bearer ${resultToken}`,
+          },
+        }
+      );
+
+      const apiResult = response.data;
+
+      setLoggedIn(true);
+      setToken(resultToken); // 토큰 저장
+
+
+      handlePopupClose();
+
+      // 로그인 성공 후 메인 페이지로 이동
+      window.location.href = "/sdfsdf"; // 메인 페이지의 경로로 수정해주세요
+    } catch (error) {
+      console.error("API 요청 에러:", error);
+    }
+  };
+
 
   return (
     <Header>
@@ -512,10 +454,10 @@ const HeaderResult = () => {
               <TopImage src="https://cloud.adofai.gg/apps/files_sharing/publicpreview/cj4GTz3xLmExWjG?file=/10.png&fileId=7306&x=1920&y=1080&a=true" alt="animore" />
               <Text>SNS 계정으로 로그인</Text>
               <ButtonContainer>
-                <KakaoLoginPage/>
-                <NaverLoginPage/>
-                <GoogleLoginPage/>
-                <FacebookLoginPage/>
+                <KakaoLoginPage onLoginSuccess={handleLoginSuccess} />
+                <NaverLoginPage onLoginSuccess={handleLoginSuccess} />
+                <GoogleLoginPage onLoginSuccess={handleLoginSuccess} />
+                <FacebookLoginPage onLoginSuccess={handleLoginSuccess} />
               </ButtonContainer>
               {/* {isLoggedIn && <SignupPopupComponent onClose={handlePopupClose} />} */}
             </PopupContainer>
