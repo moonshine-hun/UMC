@@ -3,6 +3,34 @@ import styled from 'styled-components';
 import axios from 'axios';
 
 
+const LoginButton = ({ onLogin }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    onLogin(email, password);
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        type="email"
+        placeholder="이메일"
+        value={email}
+        onChange={e => setEmail(e.target.value)}
+      />
+      <input
+        type="password"
+        placeholder="비밀번호"
+        value={password}
+        onChange={e => setPassword(e.target.value)}
+      />
+      <button type="submit">로그인</button>
+    </form>
+  );
+};
+
 
 
 const PopupContainer = styled.div`
@@ -171,12 +199,13 @@ const NaverLoginPage = () => {
 
   return (
     <ImageButton
-      src="https://cloud.adofai.gg/apps/files_sharing/publicpreview/cj4GTz3xLmExWjG?file=/image%2041.png&fileId=7626&x=1920&y=1080&a=true"
+      src="https://clova-phinf.pstatic.net/MjAxODAzMjlfOTIg/MDAxNTIyMjg3MzM3OTAy.WkiZikYhauL1hnpLWmCUBJvKjr6xnkmzP99rZPFXVwgg.mNH66A47eL0Mf8G34mPlwBFKP0nZBf2ZJn5D4Rvs8Vwg.PNG/image.png"
       alt="Naver Login"
       onClick={handleNaverLoginClick} // 네이버 로그인 처리 함수 연결
     />
   );
 };
+
 
 // 구글 로그인 버튼 컴포넌트
 const GoogleLoginPage = () => {
@@ -191,6 +220,7 @@ const GoogleLoginPage = () => {
     />
   );
 };
+
 
 // 페이스북 로그인 버튼 컴포넌트
 const FacebookLoginPage = () => {
@@ -207,6 +237,7 @@ const FacebookLoginPage = () => {
   );
 };
 
+
 // 카카오톡 로그인 버튼 컴포넌트
 const KakaoLoginPage = () => {
   const handleKakaoLoginClick = () => {
@@ -217,11 +248,14 @@ const KakaoLoginPage = () => {
     <ImageButton
       src="https://cloud.adofai.gg/apps/files_sharing/publicpreview/cj4GTz3xLmExWjG?file=/image%2036.png&fileId=7624&x=1920&y=1080&a=true"
       alt="Kakao Login"
-      // onClick={handleKakaoLogin} // 페이스북 로그인 처리 함수 연결
       onClick={handleKakaoLoginClick}
     />
   );
 };
+
+
+
+
 
 
 
@@ -336,7 +370,6 @@ const HeaderResult = () => {
   const [activeLink, setActiveLink] = useState("/signup");
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [isLoggedIn, setLoggedIn] = useState(false);
-  const [token, setToken] = useState(null);
 
   const handleLinkClick = (event, link) => {
     setActiveLink(link);
@@ -357,38 +390,26 @@ const HeaderResult = () => {
     localStorage.removeItem("loginInfo");
     window.alert("로그아웃되었습니다.");
     setLoggedIn(false);
-    setToken(null); // 토큰도 초기화
   };
 
   const handleLogoutClick = () => {
     logout();
   };
 
-  const handleLoginSuccess = async (resultToken) => {
-    try {
-      const response = await axios.get(
-        "https://animore.co.kr/login/oauth2/code/kakao",
-        {
-          headers: {
-            Authorization: `Bearer ${resultToken}`,
-          },
-        }
-      );
 
-      const apiResult = response.data;
+  // const onLogin = () => {
 
-      setLoggedIn(true);
-      setToken(resultToken); // 토큰 저장
+  //   axios.post('/oauth2/authorization/kakao').then(response => {
+  //     const { accessToken } = response.data;
 
+  //     // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
+  //     axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
 
-      handlePopupClose();
+  //   }).catch(error => {
+  //     // ... 에러 처리
+  //   });
+  // };
 
-      // 로그인 성공 후 메인 페이지로 이동
-      window.location.href = "/sdfsdf"; // 메인 페이지의 경로로 수정해주세요
-    } catch (error) {
-      console.error("API 요청 에러:", error);
-    }
-  };
 
 
   return (
@@ -454,10 +475,10 @@ const HeaderResult = () => {
               <TopImage src="https://cloud.adofai.gg/apps/files_sharing/publicpreview/cj4GTz3xLmExWjG?file=/10.png&fileId=7306&x=1920&y=1080&a=true" alt="animore" />
               <Text>SNS 계정으로 로그인</Text>
               <ButtonContainer>
-                <KakaoLoginPage onLoginSuccess={handleLoginSuccess} />
-                <NaverLoginPage onLoginSuccess={handleLoginSuccess} />
-                <GoogleLoginPage onLoginSuccess={handleLoginSuccess} />
-                <FacebookLoginPage onLoginSuccess={handleLoginSuccess} />
+                <KakaoLoginPage/>
+                <NaverLoginPage/>
+                <GoogleLoginPage/>
+                <FacebookLoginPage/>
               </ButtonContainer>
               {/* {isLoggedIn && <SignupPopupComponent onClose={handlePopupClose} />} */}
             </PopupContainer>

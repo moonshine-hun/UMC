@@ -139,7 +139,7 @@ const SignUpNext = () => {
 
   return (
     <Background>
-      <Message>OOO님 가입해주셔서 감사합니다!</Message>
+      <Message>가입해주셔서 감사합니다!</Message>
       <FirstTextContainer>
         <Text>스마트한</Text>
         <Padding1></Padding1>

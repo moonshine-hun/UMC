@@ -214,6 +214,8 @@ const SignUp = () => {
   const [petWeight, setPetWeight] = useState(0); // 강아지의 몸무게를 저장하는 상태
   const [age, setAge] = useState(0); // 강아지의 나이를 저장하는 상태
   const [features, setFeatures] = useState('');
+  const [UserName, setUserName] = useState('');
+  const [Password, setPassword] = useState('');
 
   const navigate = useNavigate();
 
@@ -228,6 +230,9 @@ const SignUp = () => {
     console.log('Pet Weight:', petWeight);
     console.log('Age:', age);
     console.log('Features:', features);
+    console.log('User Name', UserName);
+    console.log('Password', Password);
+    
     // 다음 페이지로 이동하는 코드
     navigate('/signupNext');
   };
@@ -318,6 +323,22 @@ const SignUp = () => {
           <Input type="text" value={features} onChange={(e) => setFeatures(e.target.value)} />
         </SecondText>
         <HorizontalDivider />
+
+        <SecondText>
+            닉네임:
+            <Input type="text" value={UserName} onChange={(e) => setUserName(e.target.value)} />
+        </SecondText>
+        <HorizontalDivider />
+
+        <SecondText>
+            2차 비밀번호:
+            <Input type="text" value={Password} onChange={(e) => setPassword(e.target.value)} />
+        </SecondText>
+        <HorizontalDivider />
+
+        
+
+
       
       </SecondTextContainer>
       <ButtonContainer>
