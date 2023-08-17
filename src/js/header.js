@@ -3,34 +3,6 @@ import styled from 'styled-components';
 import axios from 'axios';
 
 
-const LoginButton = ({ onLogin }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleSubmit = e => {
-    e.preventDefault();
-    onLogin(email, password);
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="email"
-        placeholder="이메일"
-        value={email}
-        onChange={e => setEmail(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="비밀번호"
-        value={password}
-        onChange={e => setPassword(e.target.value)}
-      />
-      <button type="submit">로그인</button>
-    </form>
-  );
-};
-
 
 
 const PopupContainer = styled.div`
@@ -199,13 +171,12 @@ const NaverLoginPage = () => {
 
   return (
     <ImageButton
-      src="https://clova-phinf.pstatic.net/MjAxODAzMjlfOTIg/MDAxNTIyMjg3MzM3OTAy.WkiZikYhauL1hnpLWmCUBJvKjr6xnkmzP99rZPFXVwgg.mNH66A47eL0Mf8G34mPlwBFKP0nZBf2ZJn5D4Rvs8Vwg.PNG/image.png"
+      src="https://cloud.adofai.gg/apps/files_sharing/publicpreview/cj4GTz3xLmExWjG?file=/image%2041.png&fileId=7626&x=1920&y=1080&a=true"
       alt="Naver Login"
       onClick={handleNaverLoginClick} // 네이버 로그인 처리 함수 연결
     />
   );
 };
-
 
 // 구글 로그인 버튼 컴포넌트
 const GoogleLoginPage = () => {
@@ -221,7 +192,6 @@ const GoogleLoginPage = () => {
   );
 };
 
-
 // 페이스북 로그인 버튼 컴포넌트
 const FacebookLoginPage = () => {
   const handleFacebookLoginClick = () => {
@@ -236,7 +206,6 @@ const FacebookLoginPage = () => {
     />
   );
 };
-
 
 // 카카오톡 로그인 버튼 컴포넌트
 const KakaoLoginPage = () => {
@@ -371,6 +340,37 @@ const HeaderResult = () => {
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [isLoggedIn, setLoggedIn] = useState(false);
 
+  useEffect(() => {
+    // URL에서 토큰 값을 추출하여 처리하는 함수
+    const handleTokenFromURL = async () => {
+      const url = new URL(window.location.href);
+      const token = url.searchParams.get('token');
+
+      if (token) {
+        try {
+          // API 호출하여 유저 정보 가져오기
+          const response = await axios.get('https://animore.co.kr/oauth2/authorization/kakao', {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          // 유저 정보를 이용한 작업 수행
+          console.log(response.data);
+
+        } catch (error) {
+          console.error('API 호출 에러:', error);
+        }
+      }
+    };
+
+    // 컴포넌트 마운트 시 실행
+    handleTokenFromURL();
+  }, []); // 빈 배열로 두 번째 인자를 넘겨 컴포넌트가 처음 마운트될 때 실행
+
+
+
+
   const handleLinkClick = (event, link) => {
     setActiveLink(link);
   };
@@ -395,22 +395,6 @@ const HeaderResult = () => {
   const handleLogoutClick = () => {
     logout();
   };
-
-
-  // const onLogin = () => {
-
-  //   axios.post('/oauth2/authorization/kakao').then(response => {
-  //     const { accessToken } = response.data;
-
-  //     // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
-  //     axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-
-  //   }).catch(error => {
-  //     // ... 에러 처리
-  //   });
-  // };
-
-
 
   return (
     <Header>
