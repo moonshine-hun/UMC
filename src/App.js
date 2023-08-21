@@ -21,6 +21,13 @@ function App() {
           <Route path="/signup" element={<SingUp/>} />
           {/* <SignupNext /> */}
           <Route path="/signupNext" element={<SingUpNext/>} />
+          {/* 미용실 */}
+          <Route path="/hairshop" element={<SingUpNext/>} />
+          {/* 예약내역 */}
+          <Route path="/reservationdetails" element={<SingUpNext/>} />
+          {/* 마이페이지 */}
+          <Route path="/mypage" element={<SingUpNext/>} />
+          
         </Routes>
       </BrowserRouter> 
 
