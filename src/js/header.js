@@ -164,14 +164,16 @@ const SubMenuText = styled.span`
 
 
 
+
+
 const NaverLoginPage = () => {
   const handleNaverLoginClick = () => {
-    window.location.href = "https://animore.co.kr/oauth2/authorization/naver";
+    window.location.href = "http://animore.co.kr/oauth2/authorization/naver";
   };
 
   return (
     <ImageButton
-      src="https://cloud.adofai.gg/apps/files_sharing/publicpreview/cj4GTz3xLmExWjG?file=/image%2041.png&fileId=7626&x=1920&y=1080&a=true"
+      src="https://clova-phinf.pstatic.net/MjAxODAzMjlfOTIg/MDAxNTIyMjg3MzM3OTAy.WkiZikYhauL1hnpLWmCUBJvKjr6xnkmzP99rZPFXVwgg.mNH66A47eL0Mf8G34mPlwBFKP0nZBf2ZJn5D4Rvs8Vwg.PNG/image.png"
       alt="Naver Login"
       onClick={handleNaverLoginClick} // 네이버 로그인 처리 함수 연결
     />
@@ -349,7 +351,7 @@ const HeaderResult = () => {
       if (token) {
         try {
           // API 호출하여 유저 정보 가져오기
-          const response = await axios.get('https://animore.co.kr/oauth2/authorization/kakao', {
+          const response = await axios.get('kauth.kakao.com/oauth/authorize?client_id=35e4e8d3c346459a6a90b37624e8de77&redirect_uri=http://localhost:3000/main/oauth&response_type=code', {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -464,7 +466,7 @@ const HeaderResult = () => {
                 <GoogleLoginPage/>
                 <FacebookLoginPage/>
               </ButtonContainer>
-              {/* {isLoggedIn && <SignupPopupComponent onClose={handlePopupClose} />} */}
+              {isLoggedIn && <SignupPopupComponent onClose={handlePopupClose} />}
             </PopupContainer>
           </div>
         </div>

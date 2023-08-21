@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import MainPage from './js/mainpage';
 import SingUp from './js/singup';
 import SingUpNext from './js/signupnext';
+import Main from './js/main';
+import UserToken from './js/userToken';
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 
 
@@ -13,6 +15,8 @@ function App() {
       <Routes>
         {/* 웹 서비스 소개 페이지 */}
           <Route path="/" element={<MainPage/>} />
+          <Route path="/main/:oauth" element={<Main/>} />
+          <Route path="/userToken" element={<UserToken/>} />
           {/* <SignUp /> */}
           <Route path="/signup" element={<SingUp/>} />
           {/* <SignupNext /> */}

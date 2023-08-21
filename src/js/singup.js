@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useHistory, Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom'; 
+import { useSelector } from 'react-redux';
+import DaumPostcode from 'react-daum-postcode'
 
 const Background = styled.div`
   height: 100vh;
@@ -15,14 +16,14 @@ const FirstTextContainer = styled.div`
   display: flex;
   justify-content: center;
   position: absolute;
-  top: 12%;
+  top: 5%;
   left: 50%;
   transform: translateX(-50%);
 `;
 
 const FirstText = styled.div`
   font-family: NanumBarunGothic;
-  font-size: 33px;
+  font-size: 33px;  
   line-height: 48px;
   display: flex;
   align-items: flex-end;
@@ -40,7 +41,7 @@ const SecondTextContainer = styled.div`
   flex-direction: column; /* 요소들을 수직으로 정렬하기 위해 추가 */
   justify-content: center;
   position: absolute;
-  top: 23%;
+  top: 14%;
   left: 50%;
   transform: translateX(-50%);
   width: 40%;
@@ -184,7 +185,7 @@ const ButtonContainer = styled.div`
   width: 100%;
   position: absolute;
   justify-content: center;
-  top: 88%;
+  bottom: -13%;
 `;
 
 const NextButton = styled.button`
@@ -204,38 +205,85 @@ const NextButton = styled.button`
 
 
 
+const petgenderToString = (petgender) => {
+  const selectedGenders = Object.keys(petgender).filter(key => petgender[key]);
+  return selectedGenders.join(','); // 선택된 성별을 쉼표로 구분하여 문자열로 반환
+};
+
+
 
 const SignUp = () => {
   // 추가 정보 입력 상태 정의 및 초기값 설정
   const [address, setAddress] = useState('');
-  const [petName, setPetName] = useState('');
-  const [petType, setPetType] = useState(''); // 강아지의 종류를 저장하는 상태
-  const [petSex, setPetSex] = useState(''); // 강아지의 성별을 저장하는 상태
+  const [petname, setpetname] = useState('');
+  const [pettype, setpettype] = useState(''); // 강아지의 종류를 저장하는 상태
+  const [petgender, setpetgender] = useState(''); // 강아지의 성별을 저장하는 상태
   const [petWeight, setPetWeight] = useState(0); // 강아지의 몸무게를 저장하는 상태
   const [age, setAge] = useState(0); // 강아지의 나이를 저장하는 상태
-  const [features, setFeatures] = useState('');
-  const [UserName, setUserName] = useState('');
-  const [Password, setPassword] = useState('');
+  const [specials, setspecials] = useState('');
+  const [nickname, setnickname] = useState('');
+  const [password, setpassword] = useState('');
+  const [phone, setphone] = useState('');
+  const [birth, setbirth] = useState(''); 
+  
+  
 
   const navigate = useNavigate();
 
   // "다음" 버튼 클릭 시 동작하는 함수
   const handleNextClick = () => {
-    // 입력된 정보를 여기서 활용하거나 다음 단계로 이동하는 로직을 작성하세요.
-    // 예시로 입력된 정보를 콘솔에 출력하는 것으로 대체하겠습니다.
-    console.log('Address:', address);
-    console.log('Pet Name:', petName);
-    console.log('Pet Type:', petType);
-    console.log('Pet Sex:', petSex);
-    console.log('Pet Weight:', petWeight);
-    console.log('Age:', age);
-    console.log('Features:', features);
-    console.log('User Name', UserName);
-    console.log('Password', Password);
-    
-    // 다음 페이지로 이동하는 코드
-    navigate('/signupNext');
+    // 필수 항목인지 확인하고 누락된 경우 경고 메시지 표시
+    if (!address || !petname || !pettype || !petgender || !nickname || !password || !phone ) {
+      alert('주소, 반려동물이름, 반려동물종류, 성별, 닉네임, 2차 비밀번호는 필수 입력사항입니다!');
+      return;
+    }
+
+    // 비밀번호 길이 체크 추가
+    if (password.length < 4 || password.length > 16) {
+      alert('비밀번호는 4~16자리로 입력해주세요.');
+      return;
+    }
+
+    const petTypeString = pettype.toString();
+
+    // 데이터를 POST 요청으로 서버에 보내는 코드
+    const data = {
+      address,
+      petname,
+      pettype: petTypeString,
+      petgender: petgenderToString(petgender),
+      phone,
+      password,
+      nickname,
+      birth,
+      specials,
+      petWeight,
+      age
+    };
+
+
+    // const token = useSelector(state => state.token);
+    const token = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjb3PthqDtgbAiLCJpZCI6OCwiZXhwIjoxNjkyODM5NTUyLCJ1c2VybmFtZSI6Imtha2FvXzI5Mzk0ODUxOTQifQ.aX3pGe4BQGAZhzxyp1a8geRQGAHUlLfzM9cTEWX4CL9H8C5sZ8uIqrhzhszih3NLPHqSoRb5kogPTZCFHmXFjw'
+
+    fetch('/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token,
+      },
+      body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('API Response:', data); // 서버의 응답을 콘솔에 출력
+      // 다음 페이지로 이동하는 코드
+      navigate('/signupNext');
+    })
+    .catch(error => {
+      console.error('API Error:', error);
+    });
   };
+
 
   return (
     <Background>
@@ -249,6 +297,24 @@ const SignUp = () => {
         <HorizontalDivider />
 
         <SecondText>
+            닉네임:
+            <Input type="text" value={nickname} onChange={(e) => setnickname(e.target.value)} />
+        </SecondText>
+        <HorizontalDivider />
+
+        <SecondText>
+            생년월일 ( ex: 000101 ):
+            <Input type="text" value={birth} onChange={(e) => setbirth(e.target.value)} />
+        </SecondText>
+        <HorizontalDivider />
+
+        <SecondText>
+            전화번호:
+            <Input type="text" value={phone} onChange={(e) => setphone(e.target.value)} />
+        </SecondText>
+        <HorizontalDivider />
+
+        <SecondText>
             주소:
             <Input type="text" value={address} onChange={(e) => setAddress(e.target.value)} />
         </SecondText>
@@ -256,13 +322,13 @@ const SignUp = () => {
 
         <SecondText>
           반려동물이름:
-          <Input type="text" value={petName} onChange={(e) => setPetName(e.target.value)} />
+          <Input type="text" value={petname} onChange={(e) => setpetname(e.target.value)} />
         </SecondText>
         <HorizontalDivider />
 
         <SecondText>
           반려동물종류:
-          <Select value={petType} onChange={(e) => setPetType(e.target.value)}>
+          <Select value={pettype} onChange={(e) => setpettype(e.target.value)}>
             <option value="">선택하세요</option>
             <option value="Dog">개</option>
             <option value="Cat">고양이</option>
@@ -277,29 +343,29 @@ const SignUp = () => {
             <Padding1></Padding1>                   
             <Label>
               <CheckBoxInput
-                name="petSex"
+                name="petgender"
                 value="Male"
-                checked={petSex.Male}
-                onChange={() => setPetSex((prevState) => ({ ...prevState, Male: !prevState.Male }))}
+                checked={petgender.Male}
+                onChange={() => setpetgender((prevState) => ({ ...prevState, Male: !prevState.Male }))}
               />수컷
             </Label>
             <Padding2></Padding2>
             <Label>
               <CheckBoxInput
-                name="petSex"
+                name="petgender"
                 value="Female"
-                checked={petSex.Female}
-                onChange={() => setPetSex((prevState) => ({ ...prevState, Female: !prevState.Female }))}
+                checked={petgender.Female}
+                onChange={() => setpetgender((prevState) => ({ ...prevState, Female: !prevState.Female }))}
               />
               암컷
             </Label>
             <Padding2></Padding2>
             <Label>
               <CheckBoxInput
-                name="petSex"
+                name="petgender"
                 value="Neutral"
-                checked={petSex.Neutral}
-                onChange={() => setPetSex((prevState) => ({ ...prevState, Neutral: !prevState.Neutral }))}
+                checked={petgender.Neutral}
+                onChange={() => setpetgender((prevState) => ({ ...prevState, Neutral: !prevState.Neutral }))}
               />
               중성화
             </Label>
@@ -320,26 +386,16 @@ const SignUp = () => {
 
         <SecondText>
           특이사항:
-          <Input type="text" value={features} onChange={(e) => setFeatures(e.target.value)} />
-        </SecondText>
-        <HorizontalDivider />
-
-        <SecondText>
-            닉네임:
-            <Input type="text" value={UserName} onChange={(e) => setUserName(e.target.value)} />
+          <Input type="text" value={specials} onChange={(e) => setspecials(e.target.value)} />
         </SecondText>
         <HorizontalDivider />
 
         <SecondText>
             2차 비밀번호:
-            <Input type="text" value={Password} onChange={(e) => setPassword(e.target.value)} />
+            <Input type="text" value={password} onChange={(e) => setpassword(e.target.value)} />
         </SecondText>
         <HorizontalDivider />
 
-        
-
-
-      
       </SecondTextContainer>
       <ButtonContainer>
         {/* 다음 버튼 클릭 시 handleNextClick 함수 호출 */}
